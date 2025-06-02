@@ -1,6 +1,6 @@
 <?php
 // Conexión a la base de datos
-$conn = new mysqli("localhost", "root", "", "mi_base_de_datos");
+$conn = new mysqli("localhost", "root", "", "tareas_ges");
 
 // Verifica conexión
 if ($conn->connect_error) {
@@ -12,7 +12,7 @@ $usuario = $_POST['usuario'];
 $contrasena = $_POST['contrasena'];
 
 // Consulta SQL (usamos prepared statements para seguridad)
-$sql = "SELECT * FROM usuarios WHERE usuario = ?";
+$sql = "SELECT * FROM login WHERE Usuario = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $usuario);
 $stmt->execute();
@@ -22,19 +22,16 @@ if ($resultado->num_rows === 1) {
     $fila = $resultado->fetch_assoc();
 
     // Verifica la contraseña
-    if (password_verify($contrasena, $fila['contrasena'])) {
-        // Iniciar sesión y redirigir
-        session_start();
-        $_SESSION['usuario'] = $usuario;
-        header("Location: pagina_principal.html");
-        exit();
-    } else {
-        echo "Contraseña incorrecta.";
-    }
+}if ($contrasena === $fila['Password']) {
+    session_start();
+    $_SESSION['usuario'] = $usuario;
+    header("Location: inicio.html");
+    exit();
 } else {
-    echo "Usuario no encontrado.";
-}
+    echo "Contraseña incorrecta.";
+} 
 
 $stmt->close();
-$conexion->close();
+$conn->close();
+
 ?>
