@@ -14,15 +14,16 @@ if ($conn->connect_error) {
 }
 
 // Obtener datos del formulario
-$tarea = $_POST['Titulo_tarea'];
-$descripcion = $_POST['Descrip_Ta'];
-$fincio = $_POST['Fecha_Inic'];
-$fin = $_POST['Fecha_fin']; 
+$tarea = $_POST['tarea'];
+$descripcion = $_POST['descripcion'];
+$fincio = $_POST['finicio'];
+$fin = $_POST['fin']; 
+
 
 // Preparar y ejecutar la inserción
-$sql = "INSERT INTO tareas (tarea, descripcion, fecha_creacion) VALUES (?, ?, NOW())";
+$sql = "INSERT INTO tareas (Titulo_tarea, Descrp_Ta, Fecha_Inic, Fecha_fin	) VALUES (?, ?, ?,?)";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("ss", $tarea, $descripcion, $fincio, $fin);
+$stmt->bind_param("ssss", $tarea, $descripcion, $fincio, $fin);
 
 if ($stmt->execute()) {
     echo " Tarea guardada correctamente. <a href='inicio.html'>Volver al inicio</a>";
