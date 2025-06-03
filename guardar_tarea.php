@@ -26,7 +26,7 @@ $stmt = $conn->prepare($sql);
 $stmt->bind_param("ssss", $tarea, $descripcion, $fincio, $fin);
 
 if ($stmt->execute()) {
-    echo " Tarea guardada correctamente. <a href='inicio.html'>Volver al inicio</a>";
+    echo " Tarea guardada correctamente. <a href='inicio.php'>Volver al inicio</a>";
 } else {
     echo " Error al guardar la tarea: " . $stmt->error;
 }
