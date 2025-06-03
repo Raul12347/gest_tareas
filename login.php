@@ -25,7 +25,7 @@ if ($resultado->num_rows === 1) {
 }if ($contrasena === $fila['Password']) {
     session_start();
     $_SESSION['usuario'] = $usuario;
-    header("Location: inicio.html");
+    header("Location: inicio.php");
     exit();
 } else {
     echo "Contraseña incorrecta.";
