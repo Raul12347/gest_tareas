@@ -27,10 +27,10 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <a class="nav-link active" href="../Tareas/inicio.html">Inicio</a>
+            <a class="nav-link active" href="../Tareas/inicio.php">Inicio</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Cerrar sesión</a>
+            <a class="nav-link" href="logout.php">Cerrar sesión</a>
           </li>
         </ul>
       </div>
@@ -72,6 +72,7 @@
   </thead>
   <tbody>
     <?php
+    session_start();
     $servername = "localhost";
 $username = "root";
 $password = ""; 
@@ -87,8 +88,8 @@ $conn = new mysqli($servername, $username, $password, $database);
         echo "<td>" . $fila['Fecha_Inic'] . "</td>";
         echo "<td>" . $fila['Fecha_fin'] . "</td>";
         echo "<td>
-                <a href='editar_tarea.php?id=" . $fila['Id_tarea'] . "' class='btn btn-sm btn-warning me-1'>Editar</a>
-                <a href='eliminar_tarea.php?id=" . $fila['Id_tarea'] . "' class='btn btn-sm btn-danger' onclick=\"return confirm('¿Estás seguro de eliminar esta tarea?');\">Eliminar</a>
+                <a href='edit.php?id=" . $fila['Id_tarea'] . "' class='btn btn-sm btn-warning me-1'>Editar</a>
+                <a href='borar_tarea.php?id=" . $fila['Id_tarea'] . "' class='btn btn-sm btn-danger' onclick=\"return confirm('¿Estás seguro de eliminar esta tarea?');\">Eliminar</a>
               </td>";
         echo "</tr>";
     }

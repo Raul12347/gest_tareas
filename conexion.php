@@ -1,5 +1,5 @@
 <?php 
-$servidor="localhots";
+$servidor="localhost";
 $base = "tareas_ges";
 $username = "root";
 $pass = "";

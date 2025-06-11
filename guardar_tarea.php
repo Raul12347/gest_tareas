@@ -1,34 +1,32 @@
 <?php
-// Conexión a la base de datos
-$servername = "localhost";
-$username = "root";
-$password = ""; 
-$database = "tareas_ges";
+session_start();
 
-// Crear conexión
-$conn = new mysqli($servername, $username, $password, $database);
 
-// Verificar conexión
-if ($conn->connect_error) {
-    die("Conexión fallida: " . $conn->connect_error);
+include("conexion.php");
+
+$titulo = $_POST['tarea'];
+$descripcion = $_POST['descripcion'];
+$fecha_inicio = $_POST['finicio'];
+$fecha_fin = $_POST['fin'];
+$fkusuario = $_SESSION['id_usuario'];
+
+// Prepara la consulta
+$sql = "INSERT INTO tareas (Titulo_tarea, Descrp_Ta, Fecha_Inic, Fecha_fin, Fkusuario) VALUES (?, ?, ?, ?, ?)";
+$stmt = $conn->prepare($sql);
+
+if (!$stmt) {
+    die("Error en prepare: " . $conn->error);
 }
 
-// Obtener datos del formulario
-$tarea = $_POST['tarea'];
-$descripcion = $_POST['descripcion'];
-$fincio = $_POST['finicio'];
-$fin = $_POST['fin']; 
+// Vincula los parámetros
+$stmt->bind_param("ssssi", $titulo, $descripcion, $fecha_inicio, $fecha_fin, $fkusuario);
 
-
-// Preparar y ejecutar la inserción
-$sql = "INSERT INTO tareas (Titulo_tarea, Descrp_Ta, Fecha_Inic, Fecha_fin	) VALUES (?, ?, ?,?)";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("ssss", $tarea, $descripcion, $fincio, $fin);
-
+// Ejecuta la consulta
 if ($stmt->execute()) {
-    echo " Tarea guardada correctamente. <a href='inicio.php'>Volver al inicio</a>";
+    header("Location: inicio.php");
+    exit();
 } else {
-    echo " Error al guardar la tarea: " . $stmt->error;
+    echo "Error al guardar: " . $stmt->error;
 }
 
 $stmt->close();
