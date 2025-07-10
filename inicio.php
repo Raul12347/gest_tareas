@@ -73,26 +73,49 @@
   <tbody>
     <?php
     session_start();
+
+if (!isset($_SESSION['id_usuario'])) {
+    header("Location: login.php");
+    exit();
+}
     $servername = "localhost";
 $username = "root";
-$password = ""; 
+$password = "";
 $database = "tareas_ges";
 
-// Crear conexión
+// Conexión
 $conn = new mysqli($servername, $username, $password, $database);
-    $resultado = $conn->query("SELECT * FROM tareas ORDER BY Id_tarea DESC");
-    while ($fila = $resultado->fetch_assoc()) {
-        echo "<tr>";
-        echo "<td>" . htmlspecialchars($fila['Titulo_tarea']) . "</td>";
-        echo "<td>" . htmlspecialchars($fila['Descrp_Ta']) . "</td>";
-        echo "<td>" . $fila['Fecha_Inic'] . "</td>";
-        echo "<td>" . $fila['Fecha_fin'] . "</td>";
-        echo "<td>
-                <a href='edit.php?id=" . $fila['Id_tarea'] . "' class='btn btn-sm btn-warning me-1'>Editar</a>
-                <a href='borar_tarea.php?id=" . $fila['Id_tarea'] . "' class='btn btn-sm btn-danger' onclick=\"return confirm('¿Estás seguro de eliminar esta tarea?');\">Eliminar</a>
-              </td>";
-        echo "</tr>";
-    }
+
+// Verifica conexión
+if ($conn->connect_error) {
+    die("Error de conexión: " . $conn->connect_error);
+}
+
+// Asegura que el usuario está en sesión
+$id_usuario = $_SESSION['id_usuario'];
+
+// Prepara consulta solo para tareas del usuario actual
+$stmt = $conn->prepare("SELECT * FROM tareas WHERE Fkusuario = ? ORDER BY Id_tarea DESC");
+$stmt->bind_param("i", $id_usuario);
+$stmt->execute();
+$resultado = $stmt->get_result();
+
+// Mostrar las tareas
+while ($fila = $resultado->fetch_assoc()) {
+    echo "<tr>";
+    echo "<td>" . htmlspecialchars($fila['Titulo_tarea']) . "</td>";
+    echo "<td>" . htmlspecialchars($fila['Descrp_Ta']) . "</td>";
+    echo "<td>" . $fila['Fecha_Inic'] . "</td>";
+    echo "<td>" . $fila['Fecha_fin'] . "</td>";
+    echo "<td>
+            <a href='edit.php?id=" . $fila['Id_tarea'] . "' class='btn btn-sm btn-warning me-1'>Editar</a>
+            <a href='borar_tarea.php?id=" . $fila['Id_tarea'] . "' class='btn btn-sm btn-danger' onclick=\"return confirm('¿Estás seguro de eliminar esta tarea?');\">Eliminar</a>
+          </td>";
+    echo "</tr>";
+}
+
+$stmt->close();
+$conn->close();
     ?>
   </tbody>
 </table>

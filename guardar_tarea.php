@@ -1,16 +1,19 @@
 <?php
 session_start();
-
-
 include("conexion.php");
+
+// Asegura que la sesión contiene el id del usuario
+if (!isset($_SESSION['id_usuario'])) {
+    die("Error: sesión no iniciada o usuario no autenticado.");
+}
 
 $titulo = $_POST['tarea'];
 $descripcion = $_POST['descripcion'];
 $fecha_inicio = $_POST['finicio'];
 $fecha_fin = $_POST['fin'];
-$fkusuario = $_SESSION['id_usuario'];
+$fkusuario = $_SESSION['id_usuario']; // 👈 CORRECTO: esto sí existe
 
-// Prepara la consulta
+// Prepara la consulta con el campo correcto
 $sql = "INSERT INTO tareas (Titulo_tarea, Descrp_Ta, Fecha_Inic, Fecha_fin, Fkusuario) VALUES (?, ?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
 
