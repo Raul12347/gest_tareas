@@ -1,3 +1,14 @@
+<?php
+include("conexion.php");
+session_start();
+//LINEA DE CODIGO PARA VERIFICAR SI EXISTE UNA SESION INICIADA MOSTRARA EL CONTENIDO DE LA PAGINA
+
+if(isset( $_SESSION['usuario'])){
+    $id_usu = $_SESSION['id_usuario'];
+    $usu = $_SESSION['usuario'];
+    
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -72,7 +83,9 @@
   </thead>
   <tbody>
     <?php
-    session_start();
+
+//ESTA PARTE DEL CODIGO TALVEZ PODRIAMOS MEJORARLA PARA QUE NO SE REPITA EL CODIGO DE CONEXION A LA BASE DE DATOS
+// --------------------------------------------------------------------------------------------------------------------
 
 if (!isset($_SESSION['id_usuario'])) {
     header("Location: login.php");
@@ -123,3 +136,9 @@ $conn->close();
 <script src="../Tareas/scripts/script.js"></script>
 </body>
 </html>
+<?php
+//LINEA DE CODIGO PARA CERRAR EL IF DEL INICIO Y EN CASO DE NO EXISTIR UNA SESION  ACTIVA TE VA A REDIRIJIR AL LOGIN
+} else{
+    header("location:login.html");
+}
+?>
